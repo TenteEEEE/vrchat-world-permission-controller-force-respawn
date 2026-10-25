@@ -1,0 +1,23 @@
+{
+  "name": "TenteEEEE.PermissionControllerForceRespawn.Editor",
+  "rootNamespace": "TenteEEEE.PermissionControllerForceRespawn",
+  "references": [
+    "TenteEEEE.PermissionControllerForceRespawn",
+    "UdonSharp.Runtime",
+    "UdonSharp.Editor",
+    "VRC.SDK3",
+    "VRC.SDKBase",
+    "VRC.Udon"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
