@@ -136,7 +136,7 @@ public static class ForceRespawnSim
                 break;
             case 1:
                 Check(PlayerObjectOf(rVisitor) != null && PlayerObjectOf(rCollab) != null, "remote players have PlayerObjects");
-                // Remote senders stand at the panel; the 3 m operating range is tested separately.
+                // Remote senders stand at the panel; the 2 m operating range is tested separately.
                 rVisitor.gameObject.transform.position = panel.transform.position + new Vector3(1, 0, -1);
                 rCollab.gameObject.transform.position = panel.transform.position + new Vector3(-1, 0, -1);
                 PlayerObjectOf(rVisitor).SetProgramVariable("CurrentPermission", 2);
@@ -217,10 +217,10 @@ public static class ForceRespawnSim
                 Advance(32, 1.6);
                 break;
             case 32:
-                // Still at the Visitor point, well beyond 3 m: the click explains instead of opening the dialog.
+                // Still at the Visitor point, well beyond 2 m: the click explains instead of opening the dialog.
                 RowButton(rVisitor).onClick.Invoke();
-                Check(!ConfirmationObject().activeSelf, "operator beyond 3 m cannot open confirmation");
-                Check(StatusText() == "パネルの3m以内で操作してください", "range notice (" + StatusText() + ")");
+                Check(!ConfirmationObject().activeSelf, "operator beyond 2 m cannot open confirmation");
+                Check(StatusText() == "パネルの2m以内で操作してください", "range notice (" + StatusText() + ")");
                 local.TeleportTo(NearPos(), Quaternion.identity);
                 Advance(14, 0.5);
                 break;
@@ -309,7 +309,7 @@ public static class ForceRespawnSim
                 break;
             case 45:
                 SpawnRemote("Remote Far Sender"); rFar = LastRemote();
-                rFar.gameObject.transform.position = panel.transform.position + new Vector3(0, 0, -2);
+                rFar.gameObject.transform.position = panel.transform.position + new Vector3(0, 0, -1.5f);
                 Advance(46, 1.2);
                 break;
             case 46:
@@ -342,7 +342,7 @@ public static class ForceRespawnSim
                 Advance(51, 0.3);
                 break;
             case 51:
-                CheckNear(Networking.LocalPlayer.GetPosition(), FarPos, "collaborator sender beyond 3 m is refused");
+                CheckNear(Networking.LocalPlayer.GetPosition(), FarPos, "collaborator sender beyond 2 m is refused");
                 rFar.gameObject.transform.position = panel.transform.position + new Vector3(0, 0, -4);
                 Advance(52, 1.2);
                 break;
@@ -353,6 +353,27 @@ public static class ForceRespawnSim
             case 53:
                 CheckNear(Networking.LocalPlayer.GetPosition(), FarPos, "collaborator sender at 4 m is refused");
                 Pass("sender range limit");
+                rFar.gameObject.transform.position = panel.transform.position + new Vector3(0, 0, -2.5f);
+                Advance(54, 1.2);
+                break;
+            case 54:
+                RemoteCall(rFar, Networking.LocalPlayer.playerId);
+                Advance(55, 0.3);
+                break;
+            case 55:
+                CheckNear(Networking.LocalPlayer.GetPosition(), FarPos, "collaborator sender at 2.5 m is refused at the default range");
+                panel.SetProgramVariable("operateDistance", 5f);
+                rFar.gameObject.transform.position = panel.transform.position + new Vector3(0, 0, -4);
+                Advance(56, 1.2);
+                break;
+            case 56:
+                RemoteCall(rFar, Networking.LocalPlayer.playerId);
+                Advance(57, 0.3);
+                break;
+            case 57:
+                CheckNear(Networking.LocalPlayer.GetPosition(), OverridePos, "collaborator sender at 4 m is accepted with a 5 m range");
+                Pass("adjustable operating range");
+                panel.SetProgramVariable("operateDistance", 2f);
                 Check(errors.Count == 0, "no errors during play: " + string.Join(" | ", errors));
                 Log("PASS all " + passCount + " groups");
                 Finish(0);

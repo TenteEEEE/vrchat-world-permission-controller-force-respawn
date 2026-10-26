@@ -29,10 +29,10 @@ UI text uses Unity's built-in `LegacyRuntime.ttf` with `UnityEngine.UI.Text`, so
 ## Behavior and security
 
 - Only Auth and Collab can operate the panel. The list is visible to everyone, but its action buttons are disabled for other permissions.
-- Operation works only within 3 m of the panel. Pressing from farther away shows a notice, and the target also checks the sender's position and ignores requests from beyond 3 m.
+- Operation works only within 2 m of the panel by default (adjustable in the Inspector). Pressing from farther away shows a notice, and the target also checks the sender's position.
 - A user cannot select themselves. A collaborator may select an administrator; permission rank does not restrict the target.
 - Only the operator sees the confirmation dialog. The target receives no confirmation or notification and cannot reject the request.
-- After confirmation, the panel sends a parameterized network event. Each receiving client independently checks that it is the target and that the event sender is currently Auth or Collab and within 3 m of the panel before moving (`TeleportTo` an override point if one is set, otherwise `Respawn()`). Hiding the buttons is only a UI measure; the receiver check is the permission enforcement.
+- After confirmation, the panel sends a parameterized network event. Each receiving client independently checks that it is the target and that the event sender is currently Auth or Collab and within 2 m of the panel by default (adjustable in the Inspector) before moving (`TeleportTo` an override point if one is set, otherwise `Respawn()`). Hiding the buttons is only a UI measure; the receiver check is the permission enforcement.
 - The target ignores requests that arrive less than one second after the previous accepted one. The operator's row button also shows "sent" and stays disabled for 1.5 seconds.
 - If the target leaves while confirmation is open, the dialog closes. The panel also rechecks the target and the operator's permission when **Respawn** is pressed.
 - Sitting in a station is left to VRChat's standard `Respawn()` behavior.

@@ -34,6 +34,17 @@ namespace TenteEEEE.PermissionControllerForceRespawn
             DrawControllerValidation((ForceRespawnPanel)target);
 
             EditorGUILayout.Space();
+            EditorGUILayout.LabelField("操作範囲 / Operating range", EditorStyles.boldLabel);
+            SerializedProperty operateDistance = serializedObject.FindProperty("operateDistance");
+            EditorGUILayout.PropertyField(operateDistance, new GUIContent("操作できる距離 (m) / Distance (m)"));
+            if (operateDistance.floatValue < 0.5f) { operateDistance.floatValue = 0.5f; }
+            EditorGUILayout.HelpBox(
+                "パネルからこの距離以内の管理者・協力者だけが操作できます。受信側でも送信者の位置を検査します。\n" +
+                "Only admins and collaborators within this distance of the panel can operate it; receivers check it too.",
+                MessageType.None);
+
+            EditorGUILayout.Space();
+
             EditorGUILayout.LabelField("強制リスポーン先の上書き(任意) / Destination overrides (optional)", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("authDestination"), new GUIContent("管理者 / Admin"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("collabDestination"), new GUIContent("協力者 / Collaborator"));

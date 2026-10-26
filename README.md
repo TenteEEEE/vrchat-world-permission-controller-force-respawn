@@ -5,7 +5,7 @@ A panel for [Yodokorochan's PermissionController](https://yodokoro.booth.pm/item
 [日本語](README.ja.md) · [VPM repository](https://tenteeeee.github.io/vpm-repos/) · [Package details](Packages/com.tentee.permission-controller-force-respawn/README.md)
 
 - Pick a player from the list, confirm, and they return to the respawn point for **their own** permission (the same place they would go by respawning themselves). Optional per-permission override points are available for force respawns only.
-- Only Auth and Collab can operate, and only within **3 m** of the panel. The target's own client checks the sender's permission and distance, so events sent by players without permission or from far away are ignored.
+- Only Auth and Collab can operate, and only within **2 m** of the panel by default (adjustable in the Inspector). The target's own client checks the sender's permission and distance, so events sent by players without permission or from far away are ignored.
 - The confirmation dialog is shown only to the operator. The target cannot refuse.
 - The panel matches PermissionController's default canvas (1.1 m x 0.9 m) and is placed next to it automatically.
 - **No PermissionController files are patched or redistributed.** The package reads two upstream program variables (`Controller`, `CurrentPermission`) by name.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Shorten the operating range from 3 m to 2 m and make it adjustable in the Inspector (Operating range).
+
 ## 0.1.0
 
 - Add a standalone world-space Force Respawn panel sized and styled to match PermissionController's default canvas.

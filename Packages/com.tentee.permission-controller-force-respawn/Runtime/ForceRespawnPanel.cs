@@ -16,6 +16,10 @@ namespace TenteEEEE.PermissionControllerForceRespawn
         [Tooltip("このワールドの PermissionController。パネル生成時に自動で設定されます。\nThe world's PermissionController. Assigned automatically when the panel is created.")]
         public UdonBehaviour permissionController;
 
+        [Header("操作範囲 / Operating range")]
+        [Tooltip("パネルからこの距離(m)以内にいる管理者・協力者だけが操作できます。受信側でも送信者の位置を検査します。\nOnly admins and collaborators within this distance (m) of the panel can operate it. The receiving client checks the sender's position too.")]
+        public float operateDistance = 2f;
+
         // UI references below are wired by the panel builder; the custom Inspector folds them away.
         public Transform listContent;
         public GameObject rowTemplate;
@@ -44,8 +48,6 @@ namespace TenteEEEE.PermissionControllerForceRespawn
 
         // Nobody reads the panel from farther away, so polling stops there; joins and leaves still apply.
         private const float ActiveDistance = 20f;
-        // A request counts only when its sender stands at the panel, checked by the target as well as the sender.
-        private const float OperateDistance = 3f;
         private const float PollInterval = 1f;
         private const float NoticeSeconds = 4f;
 
@@ -121,9 +123,9 @@ namespace TenteEEEE.PermissionControllerForceRespawn
             {
                 return;
             }
-            if (!IsWithin(Networking.LocalPlayer, OperateDistance))
+            if (!IsWithin(Networking.LocalPlayer, operateDistance))
             {
-                ShowNotice("パネルの3m以内で操作してください", new Color(0.075f, 0.31f, 0.263f, 1f));
+                ShowNotice("パネルの" + operateDistance.ToString("0.#") + "m以内で操作してください", new Color(0.075f, 0.31f, 0.263f, 1f));
                 return;
             }
             pendingPlayerId = targetPlayerId;
@@ -138,7 +140,7 @@ namespace TenteEEEE.PermissionControllerForceRespawn
             CloseConfirmation();
 
             VRCPlayerApi target = VRCPlayerApi.GetPlayerById(targetPlayerId);
-            if (!Utilities.IsValid(target) || !CanOperate(GetPermission(Networking.LocalPlayer)) || !IsWithin(Networking.LocalPlayer, OperateDistance))
+            if (!Utilities.IsValid(target) || !CanOperate(GetPermission(Networking.LocalPlayer)) || !IsWithin(Networking.LocalPlayer, operateDistance))
             {
                 return;
             }
@@ -167,7 +169,7 @@ namespace TenteEEEE.PermissionControllerForceRespawn
             }
             // Anyone can send a network event, so the sender's permission and position are checked here, not only on the button.
             VRCPlayerApi sender = NetworkCalling.CallingPlayer;
-            if (!CanOperate(GetPermission(sender)) || !IsWithin(sender, OperateDistance))
+            if (!CanOperate(GetPermission(sender)) || !IsWithin(sender, operateDistance))
             {
                 return;
             }
